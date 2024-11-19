@@ -18,9 +18,17 @@ import moment from 'moment';
 import _ from 'lodash';
 
 const DEFAULT_FORMAT = 'yyyy-MM-dd hh:mm a';
-const ISO_8601_FORMAT = 'yyyy-MM-ddTHH:mm:ssZ';
+const ISO_8601_FORMAT = 'yyyy-MM-ddTHH:mm:ss.SSSZ';//'yyyy-MM-ddTHH:mm:ssZ';
 
 const isIEBrowser = getBrowserInfo().ie;
+// eslint-disable-next-line no-undef
+var FLATPICKR_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/flatpickr/flatpickr.min.js`;
+// eslint-disable-next-line no-undef
+var FLATPICKRBUTTONS_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/flatpickr/shortcut-buttons-flatpickr.min.js`;
+// eslint-disable-next-line no-undef
+var FLATPICKRCSS_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/flatpickr/flatpickr.min.css`;
+// eslint-disable-next-line no-undef
+var FLATPICKRBUTTONSCSS_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/flatpickr/light.min.css`;
 
 export default class CalendarWidget extends InputWidget {
   /* eslint-disable camelcase */
@@ -109,8 +117,8 @@ export default class CalendarWidget extends InputWidget {
 
     const isReadOnly = this.settings.readOnly;
 
-    this.settings.minDate = isReadOnly ? null : getDateSetting(this.settings.minDate);
-    this.settings.maxDate = isReadOnly ? null : getDateSetting(this.settings.maxDate);
+    this.settings.minDate = isReadOnly ? '' : getDateSetting(this.settings.minDate);
+    this.settings.maxDate = isReadOnly ? '' : getDateSetting(this.settings.maxDate);
     this.settings.disable = this.disabledDates;
     this.settings.disableWeekends ? this.settings.disable.push(this.disableWeekends) : '';
     this.settings.disableWeekdays ? this.settings.disable.push(this.disableWeekdays) : '';
@@ -158,7 +166,7 @@ export default class CalendarWidget extends InputWidget {
     };
 
     Formio.requireLibrary('flatpickr-css', 'flatpickr', [
-      { type: 'styles', src: `${Formio.cdn['flatpickr-formio']}/flatpickr.min.css` }
+      { type: 'styles', src: FLATPICKRCSS_URL }
     ], true);
 
     if (this.component.shortcutButtons) {
@@ -167,7 +175,7 @@ export default class CalendarWidget extends InputWidget {
 
     if (this.component.shortcutButtons?.length) {
       Formio.requireLibrary('shortcut-buttons-flatpickr-css', 'ShortcutButtonsPlugin', [
-        { type: 'styles', src: `${Formio.cdn['shortcut-buttons-flatpickr']}/themes/light.min.css` }
+        { type: 'styles', src: FLATPICKRBUTTONSCSS_URL }
       ], true);
     }
 
@@ -175,12 +183,12 @@ export default class CalendarWidget extends InputWidget {
       .then(() => {
         if (this.component.shortcutButtons?.length) {
           return Formio.requireLibrary(
-            'shortcut-buttons-flatpickr', 'ShortcutButtonsPlugin', `${Formio.cdn['shortcut-buttons-flatpickr']}/shortcut-buttons-flatpickr.min.js`, true
+            'shortcut-buttons-flatpickr', 'ShortcutButtonsPlugin', FLATPICKRBUTTONS_URL, true
           );
         }
       })
       .then((ShortcutButtonsPlugin) => {
-        return Formio.requireLibrary('flatpickr', 'flatpickr', `${Formio.cdn['flatpickr-formio']}/flatpickr.min.js`, true)
+        return Formio.requireLibrary('flatpickr', 'flatpickr', FLATPICKR_URL, true)
           .then((Flatpickr) => {
             if (this.component.shortcutButtons?.length && ShortcutButtonsPlugin) {
               this.initShortcutButtonsPlugin(ShortcutButtonsPlugin);

@@ -18,6 +18,16 @@ import { getFormioUploadAdapterPlugin } from '../../../providers/storage/uploadA
 import enTranslation from '../../../translations/en';
 
 const isIEBrowser = FormioUtils.getBrowserInfo().ie;
+// eslint-disable-next-line no-undef
+var CKEDITOR_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/KyooCKeditor.js`;//https://cdn.form.io/ckeditor/16.0.0/ckeditor.js';
+// eslint-disable-next-line no-undef
+var QUILL_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/KyooQuill.js`;//https://cdn.form.io/quill/1.3.7';
+// eslint-disable-next-line no-undef
+var QUILLTABLE_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/KyooQuillTable.js`;
+// eslint-disable-next-line no-undef
+var QUILLSNOW_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/quillsnow.css`;
+// eslint-disable-next-line no-undef
+var ACE_URL = `${window.location.origin+$A.get('$Resource.kyoores__KyooFormIO')}/FormIO/ace.js`;
 
 let Templates = Formio.Templates;
 
@@ -2281,7 +2291,7 @@ export default class Component extends Element {
       'ckeditor',
       isIEBrowser ? 'CKEDITOR' : 'ClassicEditor',
       _.get(this.options, 'editors.ckeditor.src',
-      `${Formio.cdn.ckeditor}/ckeditor.js`
+        CKEDITOR_URL
     ), true)
       .then(() => {
         if (!element.parentNode) {
@@ -2313,13 +2323,13 @@ export default class Component extends Element {
     };
     // Lazy load the quill css.
     Formio.requireLibrary(`quill-css-${settings.theme}`, 'Quill', [
-      { type: 'styles', src: `${Formio.cdn.quill}/quill.${settings.theme}.css` }
+      { type: 'styles', src: QUILLSNOW_URL }
     ], true);
 
     // Lazy load the quill library.
-    return Formio.requireLibrary('quill', 'Quill', _.get(this.options, 'editors.quill.src', `${Formio.cdn.quill}/quill.min.js`), true)
+    return Formio.requireLibrary('quill', 'Quill', _.get(this.options, 'editors.quill.src', QUILL_URL), true)
       .then(() => {
-        return Formio.requireLibrary('quill-table', 'Quill', `${Formio.cdn.baseUrl}/quill/quill-table.js`, true)
+        return Formio.requireLibrary('quill-table', 'Quill', QUILLTABLE_URL, true)
           .then(() => {
             if (!element.parentNode) {
               return NativePromise.reject();
@@ -2374,7 +2384,7 @@ export default class Component extends Element {
       }
     }
     settings = _.merge(this.wysiwygDefault.ace, _.get(this.options, 'editors.ace.settings', {}), settings || {});
-    return Formio.requireLibrary('ace', 'ace', _.get(this.options, 'editors.ace.src', `${Formio.cdn.ace}/ace.js`), true)
+    return Formio.requireLibrary('ace', 'ace', _.get(this.options, 'editors.ace.src', ACE_URL), true)
       .then((editor) => {
         editor = editor.edit(element);
         editor.removeAllListeners('change');

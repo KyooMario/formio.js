@@ -220,7 +220,9 @@ export default class ButtonComponent extends Field {
       }
       this.isDisabledOnInvalid = this.component.disableOnInvalid && (isSilent || !isValid);
       this.disabled = this.shouldDisabled;
-      this.setDisabled(this.refs.button, this.disabled);
+      if (this.component.action === 'submit') {
+        this.setDisabled(this.refs.button, this.disabled);
+      }
 
       if (onChange) {
         onChange(value, isValid);
@@ -252,7 +254,7 @@ export default class ButtonComponent extends Field {
     });
 
     this.disabled = this.shouldDisabled;
-    this.setDisabled(this.refs.button, this.disabled);
+    //this.setDisabled(this.refs.button, this.disabled);
 
     function getUrlParameter(name) {
       name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
@@ -301,7 +303,7 @@ export default class ButtonComponent extends Field {
     this.triggerReCaptcha();
     // Don't click if disabled or in builder mode.
     if (this.disabled || this.options.attachMode === 'builder') {
-      return;
+      //return;
     }
     this.dataValue = true;
     if (this.component.action !== 'submit' && this.component.showValidations) {

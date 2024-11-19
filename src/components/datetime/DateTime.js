@@ -28,8 +28,8 @@ export default class DateTimeComponent extends Input {
         maxMode: 'year',
         yearRows: 4,
         yearColumns: 5,
-        minDate: null,
-        maxDate: null
+        minDate: '',
+        maxDate: ''
       },
       timePicker: {
         hourStep: 1,
